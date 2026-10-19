@@ -1,0 +1,15 @@
+## Interface: 16001
+## Title: Dyre's Cooldown Chimes
+## Notes: A sound just before your spells are ready again, for any class in WoW Forever
+## Author: Dyre
+## Version: 0.1.0-beta
+## IconTexture: Interface\Icons\INV_Misc_PocketWatch_01
+## Category: Buffs & Debuffs
+## OptionalDeps: DyresSounds
+## SavedVariablesPerCharacter: DyresCooldownChimesDB
+
+Commands.lua
+Spells.lua
+Core.lua
+Chimes.lua
+Options.lua
