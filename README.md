@@ -53,10 +53,10 @@ On by default first; the rest start off.
 
 ## With Mage Tools Forever or Warlock Tools Forever
 
-Both still play their own cooldown chimes. Installed together, you hear each
-chime twice. Until their next update, turn off **Cooldown chimes** in Mage
-Tools Forever's or Warlock Tools Forever's settings. DCC reminds you once at
-login while theirs are on.
+From version 0.3.0, Mage Tools Forever and Warlock Tools Forever leave the
+chimes to DCC when it is installed, so you hear each chime once. With an
+older version, both play chimes: DCC reminds you once at login to turn off
+**Cooldown chimes** in that AddOn's settings, or update it.
 
 The first time DCC runs on a Mage or Warlock, it copies that character's
 chime settings from Mage Tools Forever or Warlock Tools Forever: which spells

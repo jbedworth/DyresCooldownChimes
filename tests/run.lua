@@ -155,7 +155,11 @@ local function fixture(options)
     env.C_Secrets = {GetSpellCooldownSecrecy = function() return state.combat and secretValue() or 2 end}
     env.C_SpellBook = {IsSpellKnown = function(spellID) return SPELLS[spellID] ~= nil end}
     env.C_AddOns = {
-        GetAddOnMetadata = function(_, field)
+        GetAddOnMetadata = function(name, field)
+            if name ~= "DyresCooldownChimes" then
+                -- options.versions: other AddOns' TOC versions, as {MageToolsForever = "0.3.0-beta"}.
+                return field == "Version" and (options.versions or {})[name] or nil
+            end
             return ({Title = "Dyre's Cooldown Chimes", Version = "0.1.0-beta", Author = "Dyre"})[field]
         end,
         IsAddOnLoaded = function(name) return (options.loaded or {})[name] == true, false end,
@@ -705,6 +709,18 @@ test("a spell's own default sound comes from the spell data", function()
     equal(db.sounds[chime.key], "magical")
     equal(db.sounds[state.ns.CHIME_SPELLS.MAGE[2].key], "talent", "others keep DCC.DEFAULT_SOUND")
     chime.sound = nil
+end)
+test("no warning about an MTF or WTF that stands aside for DCC (0.3.0 and later)", function()
+    for _, version in ipairs({"0.3.0-beta", "0.3.1", "1.0.0", "0.10.0-beta"}) do
+        local state = fixture({loaded = {MageToolsForever = true}, versions = {MageToolsForever = version},
+            globals = {MageToolsForeverDB = {chimes = {enabled = true}}}})
+        equal(state.find("also plays"), nil, "MTF " .. version .. " plays no chimes while DCC is loaded")
+    end
+    for _, version in ipairs({"0.2.2-beta", "0.2.10", "bad"}) do
+        local state = fixture({class = "WARLOCK", loaded = {WarlockToolsForever = true},
+            versions = {WarlockToolsForever = version}})
+        equal(state.count("Warlock Tools Forever also plays cooldown chimes"), 1, "WTF " .. version .. " still chimes")
+    end
 end)
 test("no warning when their chimes are off, on another class, or with DCC's off", function()
     local off = fixture({loaded = {MageToolsForever = true},

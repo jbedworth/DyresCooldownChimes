@@ -86,7 +86,9 @@ title: the folder, TOC, repository, saved variables, and globals use
   character's MTF or WTF chime settings (author-approved): switches, sounds
   (mapped by Dyre's Sounds), lead, and learned cooldowns, read only. Their
   saved settings load after DCC's, so this runs at login, and once.
-- Step two (later, in MTF and WTF): they stand aside for DCC. When
+- Done in MTF and WTF 0.3.0-beta; DCC warns only about older versions, read
+  from their TOC `Version` (`asideFrom` in `OTHER_CHIMES`).
+- Step two (in MTF and WTF 0.3.0-beta): they stand aside for DCC. When
   `C_AddOns.IsAddOnLoaded("DyresCooldownChimes")` is true, MTF and WTF play no
   chimes and their chime settings say DCC plays them; later they drop their
   chimes, with a CHANGELOG note and a chat message. DCC then needs no change;

@@ -218,10 +218,13 @@ end
 -- still play their own chimes. DCC stands aside for neither; it says once at
 -- login to turn theirs off, until they stand aside for DCC. Their saved
 -- settings are only read, never written.
+-- asideFrom: their first version that stands aside for DCC (plays no chimes
+-- while DCC is loaded), so DCC warns only about older ones.
 DCC.OTHER_CHIMES = {
-    {addon = "MageToolsForever", title = "Mage Tools Forever", class = "MAGE", db = "MageToolsForeverDB"},
+    {addon = "MageToolsForever", title = "Mage Tools Forever", class = "MAGE", db = "MageToolsForeverDB",
+        asideFrom = {0, 3, 0}},
     {addon = "WarlockToolsForever", title = "Warlock Tools Forever", class = "WARLOCK",
-        db = "WarlockToolsForeverDB"},
+        db = "WarlockToolsForeverDB", asideFrom = {0, 3, 0}},
 }
 
 local function AddOnLoaded(name)
@@ -232,11 +235,31 @@ local function AddOnLoaded(name)
     return loaded == true
 end
 
+-- Whether another AddOn's TOC version (major.minor.patch) is at least the one
+-- that stands aside for DCC. A version that cannot be read counts as older.
+local function StandsAside(other)
+    if type(C_AddOns) ~= "table" or type(C_AddOns.GetAddOnMetadata) ~= "function" then
+        return false
+    end
+    local version = C_AddOns.GetAddOnMetadata(other.addon, "Version")
+    local major, minor, patch = (type(version) == "string" and version or ""):match("^(%d+)%.(%d+)%.(%d+)")
+    if not major then
+        return false
+    end
+    local found = {tonumber(major), tonumber(minor), tonumber(patch)}
+    for index = 1, 3 do
+        if found[index] ~= other.asideFrom[index] then
+            return found[index] > other.asideFrom[index]
+        end
+    end
+    return true
+end
+
 -- The titles of the other AddOns playing chimes on this character.
 function DCC.OtherChimes(classFile)
     local titles = {}
     for _, other in ipairs(DCC.OTHER_CHIMES) do
-        if other.class == classFile and AddOnLoaded(other.addon) then
+        if other.class == classFile and AddOnLoaded(other.addon) and not StandsAside(other) then
             local saved = rawget(_G, other.db)
             local chimes = type(saved) == "table" and saved.chimes
             -- Their chimes are on by default.
