@@ -75,9 +75,14 @@ function DCC.SoundLibrary()
     return library, "ok"
 end
 
+-- Dyre's Sounds is unlisted on CurseForge (author's choice, like QuestieDB), so
+-- the message says where to get it.
+local SOUNDS_WHERE = " Get it from CurseForge or github.com/jbedworth/DyresSounds."
 local SOUNDS_MESSAGES = {
-    missing = "Install Dyre's Sounds to hear the chimes. Without it, DCC still times them but plays nothing.",
-    old = "Update Dyre's Sounds to hear the chimes. This version is too old for DCC, so it plays nothing.",
+    missing = "Install Dyre's Sounds to hear the chimes. Without it, DCC still times them but plays nothing."
+        .. SOUNDS_WHERE,
+    old = "Update Dyre's Sounds to hear the chimes. This version is too old for DCC, so it plays nothing."
+        .. SOUNDS_WHERE,
 }
 
 -- Says once per session what to install when the sounds are missing.
