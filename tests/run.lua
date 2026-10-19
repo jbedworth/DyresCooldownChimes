@@ -530,7 +530,8 @@ test("without Dyre's Sounds chimes are timed, nothing plays, and DCC says so onc
     local state = fixture({sounds = "none", db = {sounds = {blink = "effectmagical"}}})
     equal(state.count("Install Dyre's Sounds"), 1)
     contains(state.find("Install Dyre's Sounds"), "DCC: ")
-    contains(state.find("Install Dyre's Sounds"), "github.com/jbedworth/DyresSounds", "says where to get it")
+    contains(state.find("Install Dyre's Sounds"), "Get it from CurseForge.", "says where to get it")
+    equal(state.find("Install Dyre's Sounds"):find("github", 1, true), nil, "CurseForge only, for now")
     state.combat = true
     state.cast(BLINK)
     state.advance(20)
